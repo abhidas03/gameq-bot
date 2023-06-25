@@ -4,9 +4,6 @@ module.exports = {
 	name: Events.InteractionCreate,
 	async execute(interaction) {
 		if (!interaction.isChatInputCommand()) return;
-        if (interaction.commandName === 'ping') {
-            await interaction.reply({ content: 'Secret Pong!', ephemeral: true });
-        }
 		const command = interaction.client.commands.get(interaction.commandName);
 
 		if (!command) {
