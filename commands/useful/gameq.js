@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, SlashCommandBuilder } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, SlashCommandBuilder, Client } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -34,14 +34,21 @@ module.exports = {
             .setCustomId('leave')
             .setLabel('Leave')
             .setStyle(ButtonStyle.Secondary);
-        
+
+        const ping = new ButtonBuilder()
+            .setCustomId('ping')
+            .setLabel('Ping Queue')
+            .setStyle(ButtonStyle.Secondary);
+
         const code = new ButtonBuilder()
             .setLabel('Code')
             .setURL('https://github.com/abhidas03/gameq-bot')
             .setStyle(ButtonStyle.Link);
 
+
+
         const row = new ActionRowBuilder()
-        .addComponents(queue, interested, leave, code);
+        .addComponents(queue, interested, leave, ping, code);
 
         queueList.push(interaction.user)
 
@@ -77,7 +84,7 @@ module.exports = {
                     }
                 }
             }
-            else {
+            else if (selection === 'leave') {
                 if (interestedList.includes(i.user)) {
                     const index = interestedList.indexOf(i.user);
                     if (index > -1) { 
@@ -97,7 +104,14 @@ module.exports = {
             const selection = i.customId;
             handleSelection(i, selection)
             await i.update(`Queue for ${name} at ${time}\nCurrent Queue: ${queueList.join(', ')}\nInterested: ${interestedList.join(', ')}`)
-
+            if (selection === 'ping') {
+                try {
+                    await i.followUp(queueList.join(', '));
+                }
+                catch {
+                    console.log('No Queue');
+                }
+            }
         });
 
 	},
