@@ -1,0 +1,1 @@
+Leave a Star (🌟) so I can get rich pls

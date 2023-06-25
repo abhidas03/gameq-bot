@@ -34,9 +34,14 @@ module.exports = {
             .setCustomId('leave')
             .setLabel('Leave')
             .setStyle(ButtonStyle.Secondary);
+        
+        const code = new ButtonBuilder()
+            .setLabel('Code')
+            .setURL('https://github.com/abhidas03/gameq-bot')
+            .setStyle(ButtonStyle.Link);
 
         const row = new ActionRowBuilder()
-        .addComponents(queue, interested, leave);
+        .addComponents(queue, interested, leave, code);
 
         queueList.push(interaction.user)
 
