@@ -6,17 +6,16 @@ module.exports = {
 		.setDescription('Create a queue for a game.')
 		.addStringOption(option =>
 			option.setName('name')
-				.setDescription('Title the queue.')
+				.setDescription('Title of the queue.')
 				.setRequired(true))
-        .addStringOption(option =>
-            option.setName('time')
-                .setDescription('Set a time to play.')
-                .setRequired(true)),
+        .addRoleOption(option =>
+            option.setName('role')
+                .setDescription('Ping a role?')),
 
 	async execute(interaction) {
+        console.log(interaction.options);
 		const name = interaction.options.getString('name');
-		const time = interaction.options.getString('time');
-        
+        const role = interaction.options.getRole('role');
         let queueList = [];
         let interestedList = [];
 
@@ -53,7 +52,7 @@ module.exports = {
         queueList.push(interaction.user)
 
         const response = await interaction.reply({
-			content: `Queue for ${name} at ${time}\nCurrent Queue: ${queueList.join(', ')}\nInterested: ${interestedList.join(', ')}`,
+			content: `${role ?? ''}\n${name}\nCurrent Queue: ${queueList.join(', ')}\nInterested: ${interestedList.join(', ')}`,
 			components: [row],
 		});
 
@@ -103,7 +102,7 @@ module.exports = {
         collector.on('collect', async i => {
             const selection = i.customId;
             handleSelection(i, selection)
-            await i.update(`Queue for ${name} at ${time}\nCurrent Queue: ${queueList.join(', ')}\nInterested: ${interestedList.join(', ')}`)
+            await i.update(`${role ?? ''}\n${name}\nCurrent Queue: ${queueList.join(', ')}\nInterested: ${interestedList.join(', ')}`)
             if (selection === 'ping') {
                 try {
                     await i.followUp(queueList.join(', '));
